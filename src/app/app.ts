@@ -1,10 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+//import { RouterOutlet } from '@angular/router';
+import {BrandsComponent} from './pages/brands/brands.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
+  standalone: true,
+  imports: [BrandsComponent],
+  template: '<app-brands></app-brands>',
   styleUrl: './app.css'
 })
 export class App {

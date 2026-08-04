@@ -1,0 +1,15 @@
+<h2>Prueba de Conexión: Marcas</h2>
+
+@if (errorMessage) {
+  <p style="color: red;">{{ errorMessage }}</p>
+}
+
+@if (brands.length > 0) {
+  <ul>
+    @for (brand of brands; track brand.brandId) {
+      <li><strong>ID:</strong> {{ brand.brandId }} - <strong>Nombre:</strong> {{ brand.brandName }}</li>
+    }
+  </ul>
+} @else {
+  <p>Cargando datos o no hay marcas registradas...</p>
+}
