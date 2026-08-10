@@ -11,22 +11,22 @@ export class BrandService {
     private readonly apiUrl = 'https://localhost:7129/api/Brands';
 
     getBrands(): Observable<Brand[]> {
-        return this.http.get<Brand[]>(this.apiUrl+'/GetBrands');
+        return this.http.get<Brand[]>(`${this.apiUrl}/GetBrands`);
     }
 
     getBrandById(brandId: number): Observable<Brand> {
-        return this.http.get<Brand>(`${this.apiUrl}/${brandId}`);
+        return this.http.get<Brand>(`${this.apiUrl}/GetBrandById/${brandId}`);
     }
 
     createBrand(brand: CreateBrandDto) : Observable<Brand>{
-        return this.http.post<Brand>(this.apiUrl, brand);
+        return this.http.post<Brand>(`${this.apiUrl}/CreateBrand`, brand);
     }
 
     updateBrand(brand: UpdateBrandDto): Observable<Brand> {
-        return this.http.put<Brand>(`${this.apiUrl}/`, brand);
+        return this.http.put<Brand>(`${this.apiUrl}/UpdateBrand`, brand);
     }
 
     deleteBrand(brandId: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/${brandId}`);
+        return this.http.delete<void>(`${this.apiUrl}/DeleteBrand/${brandId}`);
     }
 }
