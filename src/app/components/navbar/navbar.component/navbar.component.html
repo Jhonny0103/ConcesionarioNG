@@ -1,0 +1,15 @@
+<p-toolbar styleClass="custom-toolbar">
+  <ng-template pTemplate="start">
+    <div class="logo-section">
+      <i class="pi pi-car logo-icon"></i>
+      <span class="app-title">ConcesionarioDB</span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <div class="actions">
+      <p-button label="Inicio" icon="pi pi-home" [routerLink]="['/dashboard']" [text]="true"></p-button>
+      <p-button label="Cerrar Sesión" icon="pi pi-power-off" severity="danger" [outlined]="true" (onClick)="logout()"></p-button>
+    </div>
+  </ng-template>
+</p-toolbar>

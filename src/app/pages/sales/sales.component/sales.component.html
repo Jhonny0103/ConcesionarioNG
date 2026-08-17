@@ -1,0 +1,183 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="crud-container">
+  <!-- Encabezado y Botón Crear -->
+  <div class="header-section">
+    <div>
+      <h1>Gestión de Ventas</h1>
+      <p>Registro y control de operaciones de venta realizadas</p>
+    </div>
+    <p-button 
+      label="Nueva Venta" 
+      icon="pi pi-plus" 
+      severity="primary" 
+      (click)="openNew()">
+    </p-button>
+  </div>
+
+  <!-- Tabla de Datos -->
+  <div class="table-card">
+    <p-table 
+      [value]="sales" 
+      [loading]="loading"
+      [paginator]="true" 
+      [rows]="5" 
+      [rowsPerPageOptions]="[5, 10, 25]"
+      responsiveLayout="scroll"
+      styleClass="p-datatable-striped">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 10%">ID Venta</th>
+          <th style="width: 15%">ID Vehículo</th>
+          <th style="width: 15%">ID Cliente</th>
+          <th style="width: 20%">Fecha</th>
+          <th style="width: 20%">Precio</th>
+          <th style="width: 20%; text-align: center">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-sale>
+        <tr>
+          <td>#{{ sale.saleId }}</td>
+          <td>#{{ sale.vehicleId }}</td>
+          <td>#{{ sale.customerId }}</td>
+          <td>{{ sale.saleDate | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td class="font-bold text-green-600">{{ sale.salePrice | currency:'EUR':'symbol':'1.2-2' }}</td>
+          <td style="text-align: center">
+            <div class="action-buttons">
+              <!-- Detalles -->
+              <p-button 
+                icon="pi pi-eye" 
+                [rounded]="true" 
+                [text]="true" 
+                severity="info" 
+                pTooltip="Detalles"
+                (click)="showDetails(sale)">
+              </p-button>
+              <!-- Editar -->
+              <p-button 
+                icon="pi pi-pencil" 
+                [rounded]="true" 
+                [text]="true" 
+                severity="warn" 
+                pTooltip="Editar"
+                (click)="editSale(sale)">
+              </p-button>
+              <!-- Eliminar -->
+              <p-button 
+                icon="pi pi-trash" 
+                [rounded]="true" 
+                [text]="true" 
+                severity="danger" 
+                pTooltip="Eliminar"
+                (click)="confirmDelete(sale)">
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="empty-message">No se encontraron ventas registradas.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- MODAL FORMULARIO (Crear / Editar) -->
+<p-dialog 
+  [(visible)]="saleDialog" 
+  [header]="isEditMode ? 'Editar Venta' : 'Nueva Venta'" 
+  [modal]="true" 
+  [style]="{ width: '420px' }"
+  styleClass="p-fluid">
+
+  <div class="dialog-field">
+    <label for="vehicleId" class="font-medium">ID del Vehículo</label>
+    <p-inputNumber 
+      id="vehicleId" 
+      [(ngModel)]="vehicleIdInput" 
+      [useGrouping]="false" 
+      placeholder="Ej. 1" />
+  </div>
+
+  <div class="dialog-field">
+    <label for="customerId" class="font-medium">ID del Cliente</label>
+    <p-inputNumber 
+      id="customerId" 
+      [(ngModel)]="customerIdInput" 
+      [useGrouping]="false" 
+      placeholder="Ej. 10" />
+  </div>
+
+  <div class="dialog-field">
+    <label for="salePrice" class="font-medium">Precio de Venta</label>
+    <p-inputNumber 
+      id="salePrice" 
+      [(ngModel)]="salePriceInput" 
+      mode="currency" 
+      currency="EUR" 
+      locale="es-ES" 
+      placeholder="0.00" />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times" 
+      [text]="true" 
+      severity="secondary" 
+      (click)="saleDialog = false">
+    </p-button>
+    <p-button 
+      [label]="isEditMode ? 'Actualizar' : 'Guardar'" 
+      icon="pi pi-check" 
+      [loading]="saving"
+      (click)="saveSale()">
+    </p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- MODAL DETALLES -->
+<p-dialog 
+  [(visible)]="detailsDialog" 
+  header="Detalles de la Venta" 
+  [modal]="true" 
+  [style]="{ width: '380px' }">
+
+  <div class="details-container" *ngIf="selectedSale">
+    <div class="detail-row">
+      <span class="detail-label">ID Venta:</span>
+      <span class="detail-value">#{{ selectedSale.saleId }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">ID Vehículo:</span>
+      <span class="detail-value">#{{ selectedSale.vehicleId }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">ID Cliente:</span>
+      <span class="detail-value">#{{ selectedSale.customerId }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Fecha de Registro:</span>
+      <span class="detail-value">{{ selectedSale.saleDate | date:'dd/MM/yyyy HH:mm' }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Precio Final:</span>
+      <span class="detail-value font-bold text-green-600">{{ selectedSale.salePrice | currency:'EUR':'symbol':'1.2-2' }}</span>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cerrar" 
+      icon="pi pi-times" 
+      [text]="true" 
+      (click)="detailsDialog = false">
+    </p-button>
+  </ng-template>
+</p-dialog>

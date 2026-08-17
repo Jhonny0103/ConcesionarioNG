@@ -1,0 +1,218 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="crud-container">
+  <!-- Encabezado y Botón Crear -->
+  <div class="header-section">
+    <div>
+      <h1>Gestión de Clientes</h1>
+      <p>Administra los datos de contacto y estado de tus clientes</p>
+    </div>
+    <p-button 
+      label="Nuevo Cliente" 
+      icon="pi pi-plus" 
+      severity="primary" 
+      (click)="openNew()">
+    </p-button>
+  </div>
+
+  <!-- Tabla de Datos -->
+  <div class="table-card">
+    <p-table 
+      [value]="customers" 
+      [loading]="loading"
+      [paginator]="true" 
+      [rows]="5" 
+      [rowsPerPageOptions]="[5, 10, 25]"
+      responsiveLayout="scroll"
+      styleClass="p-datatable-striped">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 8%">ID</th>
+          <th style="width: 25%">Nombre Completo</th>
+          <th style="width: 25%">Email</th>
+          <th style="width: 15%">Teléfono</th>
+          <th style="width: 12%">Estado</th>
+          <th style="width: 15%; text-align: center">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td>#{{ customer.customerId }}</td>
+          <td class="font-bold">{{ customer.firstName }} {{ customer.lastName }}</td>
+          <td>{{ customer.email }}</td>
+          <td>{{ customer.phoneNumber || '-' }}</td>
+          <td>
+            <p-tag 
+              [value]="customer.isActive ? 'Activo' : 'Inactivo'" 
+              [severity]="customer.isActive ? 'success' : 'danger'">
+            </p-tag>
+          </td>
+          <td style="text-align: center">
+            <div class="action-buttons">
+              <!-- Detalles -->
+              <p-button 
+                icon="pi pi-eye" 
+                [rounded]="true" 
+                [text]="true" 
+                severity="info" 
+                pTooltip="Detalles"
+                (click)="showDetails(customer)">
+              </p-button>
+              <!-- Editar -->
+              <p-button 
+                icon="pi pi-pencil" 
+                [rounded]="true" 
+                [text]="true" 
+                severity="warn" 
+                pTooltip="Editar"
+                (click)="editCustomer(customer)">
+              </p-button>
+              <!-- Eliminar -->
+              <p-button 
+                icon="pi pi-trash" 
+                [rounded]="true" 
+                [text]="true" 
+                severity="danger" 
+                pTooltip="Eliminar"
+                (click)="confirmDelete(customer)">
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="empty-message">No se encontraron clientes registrados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- MODAL FORMULARIO (Crear / Editar) -->
+<p-dialog 
+  [(visible)]="customerDialog" 
+  [header]="isEditMode ? 'Editar Cliente' : 'Nuevo Cliente'" 
+  [modal]="true" 
+  [style]="{ width: '450px' }"
+  styleClass="p-fluid">
+
+  <div class="dialog-field">
+    <label for="firstName" class="font-medium">Nombre</label>
+    <input 
+      type="text" 
+      pInputText 
+      id="firstName" 
+      [(ngModel)]="firstNameInput" 
+      placeholder="Ej. Juan" 
+      required 
+      autofocus />
+  </div>
+
+  <div class="dialog-field">
+    <label for="lastName" class="font-medium">Apellidos</label>
+    <input 
+      type="text" 
+      pInputText 
+      id="lastName" 
+      [(ngModel)]="lastNameInput" 
+      placeholder="Ej. Pérez Gómez" 
+      required />
+  </div>
+
+  <div class="dialog-field">
+    <label for="email" class="font-medium">Correo Electrónico</label>
+    <input 
+      type="email" 
+      pInputText 
+      id="email" 
+      [(ngModel)]="emailInput" 
+      placeholder="juan.perez@example.com" 
+      required />
+  </div>
+
+  <div class="dialog-field">
+    <label for="phone" class="font-medium">Teléfono (Opcional)</label>
+    <input 
+      type="text" 
+      pInputText 
+      id="phone" 
+      [(ngModel)]="phoneNumberInput" 
+      placeholder="+34 600 000 000" />
+  </div>
+
+    <div class="dialog-field switch-field" *ngIf="isEditMode">
+    <label for="isActive" class="font-medium">Estado del Cliente</label>
+    <div class="flex-switch">
+        <p-toggleSwitch id="isActive" [(ngModel)]="isActiveInput"></p-toggleSwitch>
+        <span>{{ isActiveInput ? 'Activo' : 'Inactivo' }}</span>
+    </div>
+    </div>
+
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times" 
+      [text]="true" 
+      severity="secondary" 
+      (click)="customerDialog = false">
+    </p-button>
+    <p-button 
+      [label]="isEditMode ? 'Actualizar' : 'Guardar'" 
+      icon="pi pi-check" 
+      [loading]="saving"
+      (click)="saveCustomer()">
+    </p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- MODAL DETALLES -->
+<p-dialog 
+  [(visible)]="detailsDialog" 
+  header="Detalles del Cliente" 
+  [modal]="true" 
+  [style]="{ width: '400px' }">
+
+  <div class="details-container" *ngIf="selectedCustomer">
+    <div class="detail-row">
+      <span class="detail-label">ID Cliente:</span>
+      <span class="detail-value">#{{ selectedCustomer.customerId }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Nombre:</span>
+      <span class="detail-value font-bold">{{ selectedCustomer.firstName }} {{ selectedCustomer.lastName }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Email:</span>
+      <span class="detail-value">{{ selectedCustomer.email }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Teléfono:</span>
+      <span class="detail-value">{{ selectedCustomer.phoneNumber || 'No especificado' }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Fecha de Alta:</span>
+      <span class="detail-value">{{ selectedCustomer.createdDate | date:'dd/MM/yyyy HH:mm' }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Estado:</span>
+      <p-tag 
+        [value]="selectedCustomer.isActive ? 'Activo' : 'Inactivo'" 
+        [severity]="selectedCustomer.isActive ? 'success' : 'danger'">
+      </p-tag>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cerrar" 
+      icon="pi pi-times" 
+      [text]="true" 
+      (click)="detailsDialog = false">
+    </p-button>
+  </ng-template>
+</p-dialog>

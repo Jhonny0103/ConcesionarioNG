@@ -1,0 +1,25 @@
+<div class="dashboard-container">
+  <div class="header-section">
+    <h1>Panel de Control</h1>
+    <p>Selecciona un módulo para gestionar tu concesionario</p>
+  </div>
+
+  <div class="grid-container">
+    @for (item of options; track item.title) {
+      <p-card styleClass="menu-card" (click)="navigateTo(item.route)">
+        <div class="card-content">
+          <div class="icon-wrapper" [style.background-color]="item.color + '15'" [style.color]="item.color">
+            <i [class]="item.icon"></i>
+          </div>
+          <div class="text-wrapper">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+          </div>
+          <div class="action-wrapper">
+            <p-button icon="pi pi-arrow-right" [rounded]="true" [text]="true"></p-button>
+          </div>
+        </div>
+      </p-card>
+    }
+  </div>
+</div>

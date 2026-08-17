@@ -1,0 +1,42 @@
+<div class="login-container">
+  <p-card header="Acceso al Sistema" subheader="Ingresa tus credenciales" styleClass="login-card">
+    
+    @if (errorMessage) {
+      <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-3"></p-message>
+    }
+
+    <form (ngSubmit)="onLogin()" class="login-form">
+      <div class="field">
+        <label for="firstName">Nombre</label>
+        <input 
+          id="firstName" 
+          type="text" 
+          pInputText 
+          [(ngModel)]="firstName" 
+          name="firstName" 
+          placeholder="Ej. Juan" 
+          required />
+      </div>
+
+      <div class="field">
+        <label for="email">Correo Electrónico</label>
+        <input 
+          id="email" 
+          type="email" 
+          pInputText 
+          [(ngModel)]="email" 
+          name="email" 
+          placeholder="ejemplo@correo.com" 
+          required />
+      </div>
+
+      <p-button 
+        label="Ingresar" 
+        icon="pi pi-sign-in" 
+        [loading]="loading" 
+        type="submit" 
+        styleClass="w-full mt-3">
+      </p-button>
+    </form>
+  </p-card>
+</div>
