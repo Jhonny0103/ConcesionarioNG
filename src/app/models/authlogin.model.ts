@@ -1,4 +1,4 @@
 export interface AuthLogin {
-    firstName: string,
+    name: string,
     email: string
 }

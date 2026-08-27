@@ -26,13 +26,13 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  public firstName: string = '';
+  public name: string = '';
   public email: string = '';
   public errorMessage: string = '';
   public loading: boolean = false;
 
   onLogin(): void {
-    if (!this.firstName.trim() || !this.email.trim()) {
+    if (!this.name.trim() || !this.email.trim()) {
       this.errorMessage = 'Por favor, ingresa el nombre y el correo electrónico.';
       return;
     }
@@ -41,14 +41,14 @@ export class LoginComponent {
     this.errorMessage = '';
 
     const loginData: AuthLogin = {
-      firstName: this.firstName.trim(),
+      name: this.name.trim(),
       email: this.email.trim()
     };
 
     this.authService.getLogin(loginData).subscribe({
-      next: (customer) => {
+      next: (employe) => {
         this.loading = false;
-        if (customer) {
+        if (employe) {
           this.router.navigate(['/dashboard']);
         }
       },
