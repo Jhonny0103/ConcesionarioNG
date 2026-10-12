@@ -29,7 +29,6 @@
       
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 8%">ID</th>
           <th style="width: 25%">Nombre Completo</th>
           <th style="width: 25%">Email</th>
           <th style="width: 15%">Teléfono</th>
@@ -40,7 +39,6 @@
 
       <ng-template pTemplate="body" let-customer>
         <tr>
-          <td>#{{ customer.customerId }}</td>
           <td class="font-bold">{{ customer.firstName }} {{ customer.lastName }}</td>
           <td>{{ customer.email }}</td>
           <td>{{ customer.phoneNumber || '-' }}</td>
@@ -179,10 +177,6 @@
 
   <div class="details-container" *ngIf="selectedCustomer">
     <div class="detail-row">
-      <span class="detail-label">ID Cliente:</span>
-      <span class="detail-value">#{{ selectedCustomer.customerId }}</span>
-    </div>
-    <div class="detail-row">
       <span class="detail-label">Nombre:</span>
       <span class="detail-value font-bold">{{ selectedCustomer.firstName }} {{ selectedCustomer.lastName }}</span>
     </div>
@@ -196,7 +190,7 @@
     </div>
     <div class="detail-row">
       <span class="detail-label">Fecha de Alta:</span>
-      <span class="detail-value">{{ selectedCustomer.createdDate | date:'dd/MM/yyyy HH:mm' }}</span>
+      <span class="detail-value">{{ selectedCustomer.createdDate | date:'dd/MM/yyyy' }}</span>
     </div>
     <div class="detail-row">
       <span class="detail-label">Estado:</span>

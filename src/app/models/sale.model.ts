@@ -18,3 +18,18 @@ export interface UpdateSaleDto {
   customerId: number;
   salePrice: number;
 }
+
+export interface SaleDetails {
+  saleId: number;
+  vehicleId: number;
+  modelId: number;
+  modelName: string;
+  brandId: number;
+  brandName: string;
+  licensePlate: string;
+  customerId: number;
+  firstName: string;
+  lastName: string;
+  saleDate: string;
+  salePrice: number;
+}

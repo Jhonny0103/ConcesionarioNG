@@ -19,7 +19,7 @@
   <!-- Tabla de Datos -->
   <div class="table-card">
     <p-table 
-      [value]="sales" 
+      [value]="salesDetails" 
       [loading]="loading"
       [paginator]="true" 
       [rows]="5" 
@@ -29,9 +29,8 @@
       
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 10%">ID Venta</th>
-          <th style="width: 15%">ID Vehículo</th>
-          <th style="width: 15%">ID Cliente</th>
+          <th style="width: 10%">Vehiculo</th>
+          <th style="width: 15%">Cliente</th>
           <th style="width: 20%">Fecha</th>
           <th style="width: 20%">Precio</th>
           <th style="width: 20%; text-align: center">Acciones</th>
@@ -40,10 +39,9 @@
 
       <ng-template pTemplate="body" let-sale>
         <tr>
-          <td>#{{ sale.saleId }}</td>
-          <td>#{{ sale.vehicleId }}</td>
-          <td>#{{ sale.customerId }}</td>
-          <td>{{ sale.saleDate | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ sale.modelName }}  {{ sale.brandName }}  {{ sale.licensePlate }}</td>
+          <td>{{ sale.firstName }} {{ sale.lastName }}</td>
+          <td>{{ sale.saleDate | date:'dd/MM/yyyy' }}</td>
           <td class="font-bold text-green-600">{{ sale.salePrice | currency:'EUR':'symbol':'1.2-2' }}</td>
           <td style="text-align: center">
             <div class="action-buttons">
@@ -97,21 +95,27 @@
   styleClass="p-fluid">
 
   <div class="dialog-field">
-    <label for="vehicleId" class="font-medium">ID del Vehículo</label>
-    <p-inputNumber 
+    <label for="vehicleId" class="font-medium">Vehículo</label>
+    <p-select 
       id="vehicleId" 
       [(ngModel)]="vehicleIdInput" 
-      [useGrouping]="false" 
-      placeholder="Ej. 1" />
+      [options]="vehicles" 
+      optionLabel="fullName" 
+      optionValue="vehicleId" 
+      placeholder="Seleccione un Vehículo">
+    </p-select>
   </div>
 
   <div class="dialog-field">
-    <label for="customerId" class="font-medium">ID del Cliente</label>
-    <p-inputNumber 
+    <label for="customerId" class="font-medium">Cliente</label>
+    <p-select 
       id="customerId" 
       [(ngModel)]="customerIdInput" 
-      [useGrouping]="false" 
-      placeholder="Ej. 10" />
+      [options]="customers" 
+      optionLabel="fullName"
+      optionValue="customerId" 
+      placeholder="Seleccione un Cliente">
+    </p-select>
   </div>
 
   <div class="dialog-field">
@@ -151,20 +155,16 @@
 
   <div class="details-container" *ngIf="selectedSale">
     <div class="detail-row">
-      <span class="detail-label">ID Venta:</span>
-      <span class="detail-value">#{{ selectedSale.saleId }}</span>
+      <span class="detail-label">Vehiculo:</span>
+      <span class="detail-value"># {{ selectedSale.brandName }} / {{ selectedSale.modelName }}</span>
     </div>
     <div class="detail-row">
-      <span class="detail-label">ID Vehículo:</span>
-      <span class="detail-value">#{{ selectedSale.vehicleId }}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">ID Cliente:</span>
-      <span class="detail-value">#{{ selectedSale.customerId }}</span>
+      <span class="detail-label">Cliente:</span>
+      <span class="detail-value">{{ selectedSale.firstName }} {{ selectedSale.lastName }}</span>
     </div>
     <div class="detail-row">
       <span class="detail-label">Fecha de Registro:</span>
-      <span class="detail-value">{{ selectedSale.saleDate | date:'dd/MM/yyyy HH:mm' }}</span>
+      <span class="detail-value">{{ selectedSale.saleDate | date:'dd/MM/yyyy' }}</span>
     </div>
     <div class="detail-row">
       <span class="detail-label">Precio Final:</span>

@@ -23,6 +23,7 @@ export class VehicleService {
   }
 
   updateVehicle(vehicle: UpdateVehicleDto): Observable<Vehicle> {
+    console.log('Updating vehicle:', vehicle); // Log the vehicle object to the console
     return this.http.put<Vehicle>(`${this.apiUrl}/UpdateVehicle`, vehicle);
   }
 

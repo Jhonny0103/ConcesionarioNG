@@ -80,7 +80,7 @@ export class VehiclesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBrands();
-    //this.loadModels();
+    this.loadModels();
     this.loadVehicles();
   }
 
@@ -88,6 +88,7 @@ export class VehiclesComponent implements OnInit {
     this.brandService.getBrands().subscribe({
       next:(data) => {
         this.brands = data;
+        // console.log('Brands loaded:', this.brands);
       }
     })
   }
@@ -96,6 +97,7 @@ export class VehiclesComponent implements OnInit {
     this.modelService.getModels().subscribe({
       next:(data) => {
         this.models = data;
+        // console.log('Models loaded:', this.models);
       }
     })
   }
@@ -107,6 +109,7 @@ export class VehiclesComponent implements OnInit {
       next: (data) => {
         this.vehicles = data;
         this.loading = false;
+        // console.log('Vehicles loaded:', this.vehicles);
       },
       error: () => {
         this.messageService.add({
@@ -138,7 +141,7 @@ export class VehiclesComponent implements OnInit {
     this.isEditMode = true;
     this.selectedVehicle = { ...vehicle };
     this.modelIdInput = vehicle.modelId;
-    this.brandIdInput = null; // Asignar si tu backend retorna el brandId en la consulta
+    this.brandIdInput = vehicle.brandId; // Asignar si tu backend retorna el brandId en la consulta
     this.licensePlateInput = vehicle.licensePlate;
     this.colorInput = vehicle.color;
     this.yearInput = vehicle.year;

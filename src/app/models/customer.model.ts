@@ -6,6 +6,7 @@ export interface Customer {
   phoneNumber: string;
   createdDate: string;
   isActive: boolean;
+  fullName: string; // This is a computed property that combines firstName and lastName
 }
 
 export interface CreateCustomerDto {

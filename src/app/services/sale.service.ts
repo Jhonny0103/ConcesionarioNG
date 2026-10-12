@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Sale, CreateSaleDto, UpdateSaleDto } from '../models/sale.model';
+import { Sale, CreateSaleDto, UpdateSaleDto, SaleDetails } from '../models/sale.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,10 @@ export class SaleService {
 
   getSales(): Observable<Sale[]> {
     return this.http.get<Sale[]>(`${this.apiUrl}/GetSales`);
+  }
+
+  getSalesDetails(): Observable<SaleDetails[]> {
+    return this.http.get<SaleDetails[]>(`${this.apiUrl}/GetSalesDetails/details`);
   }
 
   getSaleById(saleId: number): Observable<Sale> {
